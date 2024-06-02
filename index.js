@@ -41,7 +41,7 @@ onValue(endorsementInDB,function(snapshot){
         clearEndorsementList()
         for (let i = 0; i < updatedEndorsements.length; i ++){
             let currentEndorsement = updatedEndorsements[i]
-            addToEndorsements(currentEndorsement[1])
+            addToEndorsements(currentEndorsement)
         }
         
     }
@@ -55,11 +55,11 @@ function clearEndorsementList() {
     endorsementContainerEl.innerHTML = ""
 }
 function addToEndorsements(endorsement){
-    console.log(endorsement)
-    let text = endorsement.text
-    let from = endorsement.from
-    let to = endorsement.to
-    let likeCount = endorsement.likes
+    let endorsementId = endorsement[0]
+    let text = endorsement[1].text
+    let from = endorsement[1].from
+    let to = endorsement[1].to
+    let likeCount = endorsement[1].likes
     console.log(text)
 
     let newEndorsementCard = document.createElement("div")
@@ -78,13 +78,7 @@ function addToEndorsements(endorsement){
     likeCountSpan.textContent = "🖤" + likeCount
 
 
-    // likeCountSpan.addEventListener("click",function(){
-    //     let newLikes = 
-    //     const endorsementRef = ref(endorsementInDB,`${endorsementId}`)
-    //     update(endorsementRef,{
-    //         likes: 
-    //     })
-    // })
+    
 
     fromHeader.classList.add("endorsement-from")
     toHeader.classList.add("endorsement-to")
