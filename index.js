@@ -1,5 +1,5 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import {getDatabase, ref, push, onValue,remove, update} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import {getDatabase, ref, push, onValue,remove, child, get, update} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://endorsement-mobile-app-default-rtdb.firebaseio.com/"
@@ -54,13 +54,12 @@ onValue(endorsementInDB,function(snapshot){
 function clearEndorsementList() {
     endorsementContainerEl.innerHTML = ""
 }
-function addToEndorsements(endorsement){
+ function addToEndorsements(endorsement){
     let endorsementId = endorsement[0]
     let text = endorsement[1].text
     let from = endorsement[1].from
     let to = endorsement[1].to
     let likeCount = endorsement[1].likes
-    console.log(text)
 
     let newEndorsementCard = document.createElement("div")
     newEndorsementCard.classList.add("endorsement-card")
@@ -76,10 +75,6 @@ function addToEndorsements(endorsement){
 
     let likeCountSpan = document.createElement("span")
     likeCountSpan.textContent = "🖤" + likeCount
-
-
-    
-
     fromHeader.classList.add("endorsement-from")
     toHeader.classList.add("endorsement-to")
     
@@ -88,5 +83,36 @@ function addToEndorsements(endorsement){
     newEndorsementCard.appendChild(endorsementText)
     newEndorsementCard.appendChild(fromHeader)
     newEndorsementCard.appendChild(likeCountSpan)
+    // newEndorsementCard.appendChild(likeCountSpan)
     document.getElementById("endorsement-container").appendChild(newEndorsementCard)
+
+    const endorsementRef = child(endorsementInDB,endorsementId)
+    likeCountSpan.addEventListener("click", function(){
+        updateLikes(endorsementRef)
+
+    })
+}
+
+
+async function updateLikes(endorsementRef){
+
+    try {
+            // Getting the current data
+            const snapshot = await get(endorsementRef)
+            if (snapshot.exists()){
+                const endorsement = snapshot.val()
+                const newLikes = endorsement.likes + 1
+
+                // Update the new likes
+                await update(endorsementRef, {likes: newLikes})
+            }
+            else {
+                console.log("No data available.")
+            }
+            } 
+        catch (error) {
+            console.error("Error updating likes:", error)
+        }    
+
+
 }
