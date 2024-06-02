@@ -20,4 +20,4 @@
 - Firebase update(path, updateToBeMade) function which takes a path as the first parameter and the update to be made as the second.
 
 ## Live View
-https://jonathan-scruggs.github.io/Mobile-App-With-Firebase/
+https://jonathan-scruggs.github.io/Endorsement-Firebase-Mobile-App/
